@@ -1,0 +1,74 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vertxapp
+  labels:
+    app: vertxapp
+spec:
+  type: LoadBalancer
+  selector:
+    app: vertxapp
+  ports:
+  - protocol: TCP
+    port: 8080
+    name: http
+ 
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vertxapp
+  labels:
+    app: vertxapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: vertxapp
+  template:
+    metadata:
+      labels:
+        app: vertxapp
+        build: "1.6"
+    spec:
+      containers:
+      - name: vertxapp
+        image: test/testkube:1.6
+        ports:
+        - containerPort: 8080
+#        livenessProbe:
+#          httpGet:
+#            path: /downstream
+#            port: 8080
+#          initialDelaySeconds: 30
+#          timeoutSeconds: 10
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vertxapp-canary
+  labels:
+    app: vertxapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: vertxapp
+  template:
+    metadata:
+      labels:
+        app: vertxapp
+        build: "1.7"
+    spec:
+      containers:
+      - name: vertxapp
+        image: test/testkube:1.7
+        ports:
+        - containerPort: 8080
+#          livenessProbe:
+#          httpGet:
+#            path: /downstream
+#            port: 8080
+#          initialDelaySeconds: 30
+#          timeoutSeconds: 10
