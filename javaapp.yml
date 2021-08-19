@@ -59,11 +59,11 @@ spec:
     metadata:
       labels:
         app: vertxapp
-        build: "1.7"
+        build: "1.8"
     spec:
       containers:
       - name: vertxapp
-        image: test/testkube:1.7
+        image: test/testkube:1.8
         ports:
         - containerPort: 8080
 #          livenessProbe:
